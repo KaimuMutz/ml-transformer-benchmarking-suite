@@ -1,0 +1,53 @@
+{
+  "distilbert": {
+    "model_name": "distilbert-base-uncased",
+    "model_short_name": "distilbert",
+    "parameter_count": 66955010,
+    "training_time_seconds": 143.13395023345947,
+    "accuracy": 0.924,
+    "precision": 0.9240545830372714,
+    "recall": 0.924,
+    "f1_score": 0.9239341529955551,
+    "throughput_samples_per_second": 2558.689733467786,
+    "avg_confidence": 0.9699236309528351,
+    "confusion_matrix": [
+      [505, 33],
+      [43, 419]
+    ],
+    "inference_time_total": 0.3908250331878662
+  },
+  "electra-small": {
+    "model_name": "google/electra-small-discriminator",
+    "model_short_name": "electra-small",
+    "parameter_count": 13549314,
+    "training_time_seconds": 44.52301239967346,
+    "accuracy": 0.887,
+    "precision": 0.8874861152882206,
+    "recall": 0.887,
+    "f1_score": 0.8870929157827417,
+    "throughput_samples_per_second": 1053.2376297492704,
+    "avg_confidence": 0.8461592818498611,
+    "confusion_matrix": [
+      [475, 63],
+      [50, 412]
+    ],
+    "inference_time_total": 0.9494533538818359
+  },
+  "bert-base": {
+    "model_name": "bert-base-uncased",
+    "model_short_name": "bert-base",
+    "parameter_count": 109483778,
+    "training_time_seconds": 178.13175344467163,
+    "accuracy": 0.926,
+    "precision": 0.9261115151515152,
+    "recall": 0.926,
+    "f1_score": 0.925921246130031,
+    "throughput_samples_per_second": 1049.1546087667348,
+    "avg_confidence": 0.9826405932303,
+    "confusion_matrix": [
+      [507, 31],
+      [43, 419]
+    ],
+    "inference_time_total": 0.953148365020752
+  }
+}

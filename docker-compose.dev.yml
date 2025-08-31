@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  ml-benchmark-dev:
+    build: .
+    container_name: ml-benchmark-dev
+    
+    # Mount source code for live development
+    volumes:
+      - .:/app                                    # Live code editing
+      - ./benchmark_results:/app/benchmark_results
+      - ./logs:/app/logs
+      - dev-cache:/app/.cache                     # Persistent cache
+    
+    # Development environment variables
+    environment:
+      - PYTHONUNBUFFERED=1
+      - LOG_LEVEL=DEBUG
+      - TORCH_HOME=/app/.cache/torch
+      - TRANSFORMERS_CACHE=/app/.cache/transformers
+    
+    # Keep container running for interactive development
+    command: tail -f /dev/null
+    
+    # Expose ports for potential web interfaces
+    ports:
+      - "8080:8080"
+      - "8888:8888"  # For Jupyter if needed later
+    
+    # Enable interactive terminal
+    stdin_open: true
+    tty: true
+
+volumes:
+  dev-cache:

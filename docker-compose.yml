@@ -4,9 +4,35 @@ services:
   ml-benchmark:
     build: .
     container_name: ml-transformer-benchmark
+    
+    # Mount volumes for persistent data
     volumes:
       - ./benchmark_results:/app/benchmark_results
       - ./logs:/app/logs
+      - ./data:/app/data
+    
+    # Environment variables
     environment:
       - PYTHONUNBUFFERED=1
-    command: python ml_benchmark_suite.py --mode benchmark --sample-size 3000
+      - LOG_LEVEL=INFO
+      - TORCH_HOME=/app/.cache/torch
+    
+    # Resource limits (adjust based on your system)
+    deploy:
+      resources:
+        limits:
+          memory: 8G
+          cpus: '4.0'
+        reservations:
+          memory: 4G
+          cpus: '2.0'
+    
+    # Restart policy
+    restart: unless-stopped
+    
+    # Logging configuration
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "3"

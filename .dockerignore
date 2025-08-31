@@ -1,0 +1,89 @@
+# Python cache and build files
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Version control
+.git
+.gitignore
+.gitattributes
+
+# Generated data and results (we don't want old results in our image)
+benchmark_results/
+logs/
+models/checkpoints/
+data/raw/
+data/processed/
+
+# Development environment files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Virtual environments
+venv/
+env/
+.venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Testing and coverage
+.coverage
+.pytest_cache/
+htmlcov/
+
+# Logs and temporary files
+*.log
+*.tmp
+*.temp
+
+# Large files that shouldn't be in container
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.pdf
+*.zip
+*.tar.gz
+
+# Documentation that's not needed in container
+docs/
+*.md
+LICENSE
+
+# CI/CD files (not needed in container)
+.github/
+
+# Docker files themselves
+docker-compose*.yml
+Dockerfile*
+.dockerignore

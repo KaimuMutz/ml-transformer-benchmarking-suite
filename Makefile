@@ -1,28 +1,68 @@
-.PHONY: help install test benchmark validate clean docker-build docker-run
+.PHONY: help docker-build docker-test docker-run docker-dev docker-clean docker-logs
 
-help:  ## Show help
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-15s\033[0m %s\n", $1, $2}'
+# Default target
+help:  ## Show this help message
+	@echo "Docker commands for ML Transformer Benchmarking Suite"
+	@echo "======================================================"
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $1, $2}'
 
-install:  ## Install dependencies
-	pip install -r requirements.txt
-
-validate:  ## Validate environment
-	python ml_benchmark_suite.py --mode validate
-
-test:  ## Run quick test
-	python ml_benchmark_suite.py --mode test --sample-size 1000
-
-benchmark:  ## Run full benchmark
-	python ml_benchmark_suite.py --mode benchmark --sample-size 5000
-
-clean:  ## Clean generated files
-	rm -rf benchmark_results/ logs/ __pycache__/ *.log
-
+# Docker operations
 docker-build:  ## Build Docker image
-	docker build -t ml-benchmark-suite .
+	docker build -t ml-benchmark .
 
-docker-run:  ## Run Docker container
-	docker run -v $(PWD)/benchmark_results:/app/benchmark_results ml-benchmark-suite
+docker-rebuild:  ## Rebuild Docker image without cache
+	docker build -t ml-benchmark . --no-cache
 
-setup-check:  ## Verify setup
-	python scripts/verify_setup.py
+docker-test:  ## Run quick tests in Docker
+	docker run --rm ml-benchmark python ml_benchmark_suite.py --mode validate
+	docker run --rm ml-benchmark python ml_benchmark_suite.py --mode test --sample-size 1000
+
+docker-run:  ## Run benchmark with persistent storage
+	@mkdir -p docker-results docker-logs
+	docker run --name ml-benchmark-run \
+		-v $(pwd)/docker-results:/app/benchmark_results \
+		-v $(pwd)/docker-logs:/app/logs \
+		ml-benchmark
+
+docker-run-bg:  ## Run benchmark in background
+	@mkdir -p docker-results docker-logs
+	docker run -d --name ml-benchmark-bg \
+		-v $(pwd)/docker-results:/app/benchmark_results \
+		-v $(pwd)/docker-logs:/app/logs \
+		ml-benchmark
+
+docker-dev:  ## Start development environment
+	docker-compose -f docker-compose.dev.yml up -d
+
+docker-dev-shell:  ## Access development container shell
+	docker-compose -f docker-compose.dev.yml exec ml-benchmark-dev bash
+
+docker-dev-stop:  ## Stop development environment
+	docker-compose -f docker-compose.dev.yml down
+
+docker-prod:  ## Start production environment
+	docker-compose up -d
+
+docker-prod-stop:  ## Stop production environment
+	docker-compose down
+
+docker-logs:  ## View container logs
+	docker logs ml-benchmark-run || docker-compose logs -f
+
+docker-clean:  ## Clean up Docker resources
+	docker container prune -f
+	docker image prune -f
+	docker volume prune -f
+
+docker-clean-all:  ## Remove all Docker resources (use carefully!)
+	docker system prune -a -f
+
+# Status commands
+docker-status:  ## Show running containers
+	docker ps
+
+docker-images:  ## Show Docker images
+	docker images
+
+docker-stats:  ## Show container resource usage
+	docker stats --no-stream
