@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  ml-benchmark:
+    build: .
+    container_name: ml-transformer-benchmark
+    volumes:
+      - ./benchmark_results:/app/benchmark_results
+      - ./logs:/app/logs
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: python ml_benchmark_suite.py --mode benchmark --sample-size 3000
